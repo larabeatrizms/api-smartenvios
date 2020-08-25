@@ -1,0 +1,599 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "API Smartenvios",
+    "description": "A cotação de frete ajuda a identificar qual a opção de envio mais adequada a ser utilizada na entrega, estimando o custo (em reais) e o prazo (em dias úteis) de acordo com as dimensões, peso e destino dos produtos cotados.",
+    "license": {}
+  },
+  "host": "api.smartenvios.com",
+  "schemes": [
+    "http"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/integration/api/quote/api/quotes/calculate-freight": {
+      "post": {
+        "tags": [
+          "Cotação"
+        ],
+        "summary": "Criar uma nova cotação de frete",
+        "description": "Este método cria uma nova cotação e retorna os custos de frete e o prazo de entrega de todas as transportadoras retornadas na cotação. \n\nPara garantir que a cotação retornada de uma transportadora está correta, certifique-se de que no retorno da resposta o campo 'is_valid' é 'true'.",
+        "parameters": [
+          {
+            "type": "string",
+            "in": "header",
+            "name": "token",
+            "description": "Token do embarcador",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "amount": {
+                  "type": "number",
+                  "description": "Valor da Nota Fiscal"
+                },
+                "base_id": {
+                  "type": "string",
+                  "description": "ID da Base. Obrigatório para clientes com mais de uma base"
+                },
+                "cubage": {
+                  "type": "number",
+                  "description": "Cubagem"
+                },
+                "customer_id": {
+                  "type": "string",
+                  "description": "ID do cliente SmartEnvios"
+                },
+                "extra_days": {
+                  "type": "number",
+                  "description": "Dias adicionais"
+                },
+                "pickup": {
+                  "type": "boolean",
+                  "description": "Coleta ativa"
+                },
+                "delivery": {
+                  "type": "boolean",
+                  "description": "Entrega"
+                },
+                "bacony": {
+                  "type": "boolean",
+                  "description": "Entrega no balcão da base"
+                },
+                "additional_value": {
+                  "type": "number",
+                  "description": "Valor fixo adicional"
+                },
+                "additional_value_type": {
+                  "type": "string",
+                  "description": "Tipo do valor fixo adicional"
+                },
+                "total_weight": {
+                  "type": "number",
+                  "description": "Peso total"
+                },
+                "document": {
+                  "type": "string",
+                  "description": "Documento: CPF ou CNPJ"
+                },
+                "type_document": {
+                  "type": "string",
+                  "description": "Tipo de documento CPF ou CNPJ"
+                },
+                "volumes": {
+                  "type": "object",
+                  "required": [
+                    "height",
+                    "length",
+                    "price",
+                    "quantity",
+                    "total_price",
+                    "total_weight",
+                    "weight",
+                    "width"
+                  ],
+                  "properties": {
+                    "height": {
+                      "type": "number",
+                      "description": "Altura do volume"
+                    },
+                    "length": {
+                      "type": "number",
+                      "description": "Comprimento do volume"
+                    },
+                    "price": {
+                      "type": "number",
+                      "description": "Valor por item"
+                    },
+                    "quantity": {
+                      "type": "number",
+                      "description": "Quantidade"
+                    },
+                    "total_price": {
+                      "type": "number",
+                      "description": "Valor total"
+                    },
+                    "total_weight": {
+                      "type": "number",
+                      "description": "Peso total"
+                    },
+                    "weight": {
+                      "type": "number",
+                      "description": "Peso por item"
+                    },
+                    "width": {
+                      "type": "number",
+                      "description": "Largura do item"
+                    }
+                  }
+                },
+                "zip_code_end": {
+                  "type": "string",
+                  "description": "CEP de destino"
+                },
+                "zip_code_start": {
+                  "type": "string",
+                  "description": "CEP de origem"
+                }
+              },
+              "required": [
+                "volumes",
+                "zip_code_end",
+                "zip_code_start"
+              ],
+              "x-examples": {
+                "Exemplo": {
+                  "amount": 350,
+                  "base_id": "",
+                  "cubage": 0.108,
+                  "customer_id": "",
+                  "extra_days": 2,
+                  "pickup": true,
+                  "delivery": true,
+                  "bacony": false,
+                  "additional_value": 5,
+                  "additional_value_type": "PERCENT",
+                  "total_weight": 9,
+                  "document": "41244182800",
+                  "type_document": "CNPJ",
+                  "volumes": [
+                    {
+                      "height": 36,
+                      "length": 25,
+                      "price": 100,
+                      "quantity": 1,
+                      "total_price": 100,
+                      "total_weight": 3.5,
+                      "weight": 3.5,
+                      "width": 45
+                    }
+                  ],
+                  "zip_code_end": "04112-012",
+                  "zip_code_start": "14020-240"
+                }
+              },
+              "description": "Modelo para criar uma cotação."
+            },
+            "x-examples": {
+              "Exemplo com máximo de informações": {
+                "amount": 350,
+                "base_id": "",
+                "cubage": 0.108,
+                "customer_id": "",
+                "extra_days": 2,
+                "pickup": true,
+                "delivery": true,
+                "bacony": false,
+                "additional_value": 5,
+                "additional_value_type": "PERCENT",
+                "total_weight": 9,
+                "document": "41244182800",
+                "type_document": "CNPJ",
+                "volumes": [
+                  {
+                    "height": 36,
+                    "length": 25,
+                    "price": 100,
+                    "quantity": 1,
+                    "total_price": 100,
+                    "total_weight": 3.5,
+                    "weight": 3.5,
+                    "width": 45
+                  }
+                ],
+                "zip_code_end": "04112-012",
+                "zip_code_start": "14020-240"
+              },
+              "Exemplo com mínimo de informações": {
+                "zip_code_start": "14095140",
+                "zip_code_end": "04120120",
+                "volumes": [
+                  {
+                    "quantity": 1,
+                    "height": 10,
+                    "length": 15,
+                    "width": 20,
+                    "price": 100,
+                    "weight": 2
+                  }
+                ]
+              }
+            },
+            "description": ""
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Sucesso - Cotação é retornada.\n\nObservação: Caso a cotação seja retornada com o campo 'is_valid' como 'false', esta cotação não é válida e contém erros. Checar os exemplos abaixo.",
+            "schema": {
+              "type": "object",
+              "x-examples": {
+                "Exemplo": {
+                  "result": [
+                    {
+                      "id": "5eb9b31e1097eb6cdf922d04",
+                      "base": "RAO - SmartEnvios",
+                      "service_code": 18,
+                      "service": "Jadlog Package Pre Prod",
+                      "value": 15.64,
+                      "days": 2,
+                      "is_valid": true,
+                      "errors": []
+                    }
+                  ]
+                }
+              },
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "description": "Lista de cotações",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "ID da Cotação"
+                      },
+                      "base": {
+                        "type": "string",
+                        "description": "ID da Cotação"
+                      },
+                      "service_code": {
+                        "type": "integer",
+                        "description": "Código do serviço"
+                      },
+                      "service": {
+                        "type": "string",
+                        "description": "Descrição do serviço"
+                      },
+                      "value": {
+                        "type": "number",
+                        "description": "Valor da cotação"
+                      },
+                      "days": {
+                        "type": "integer",
+                        "description": "Prazo para entrega"
+                      },
+                      "is_valid": {
+                        "type": "boolean",
+                        "description": "Cotação válida"
+                      },
+                      "errors": {
+                        "type": "array",
+                        "description": "Lista de erros da cotação",
+                        "items": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "description": "Cotação criada."
+            },
+            "examples": {
+              "Exemplo de sucesso": {
+                "result": [
+                  {
+                    "id": "5eb9b31e1097eb6cdf922d04",
+                    "base": "RAO - SmartEnvios",
+                    "service_code": 18,
+                    "service": "Jadlog Package Pre Prod",
+                    "value": 15.64,
+                    "days": 2,
+                    "is_valid": true,
+                    "errors": []
+                  }
+                ]
+              },
+              "Exemplo de falha": {
+                "result": [
+                  {
+                    "id": "5eb9b2ed1097eb6cdf922cf3",
+                    "base": "RAO - SmartEnvios",
+                    "service_code": 7,
+                    "service": "Azul Ecommerce",
+                    "value": 0,
+                    "days": 0,
+                    "is_valid": false,
+                    "errors": [
+                      "O peso da cotação é maior do que o limite do serviço."
+                    ]
+                  }
+                ]
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict - Erros de validação",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                "type": {
+                  "type": "string"
+                },
+                "status": {
+                  "type": "number"
+                },
+                "message": {
+                  "type": "string"
+                }
+              }
+            },
+            "examples": {
+              "Exemplo": {
+                "result": [
+                  "data.base_id A validação do formato falhou \"uuid\""
+                ],
+                "type": "HttpResponseError",
+                "status": 409,
+                "message": "Não foi possível realizar a cotação devido a erros de validação."
+              }
+            }
+          }
+        },
+        "operationId": "quote"
+      }
+    }
+  },
+  "definitions": {
+    "Criar Cotação": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "Valor da Nota Fiscal"
+        },
+        "base_id": {
+          "type": "string",
+          "description": "ID da Base. Obrigatório para clientes com mais de uma base"
+        },
+        "cubage": {
+          "type": "number",
+          "description": "Cubagem"
+        },
+        "customer_id": {
+          "type": "string",
+          "description": "ID do cliente SmartEnvios"
+        },
+        "extra_days": {
+          "type": "number",
+          "description": "Dias adicionais"
+        },
+        "pickup": {
+          "type": "boolean",
+          "description": "Coleta ativa"
+        },
+        "delivery": {
+          "type": "boolean",
+          "description": "Entrega"
+        },
+        "bacony": {
+          "type": "boolean",
+          "description": "Entrega no balcão da base"
+        },
+        "additional_value": {
+          "type": "number",
+          "description": "Valor fixo adicional"
+        },
+        "additional_value_type": {
+          "type": "string",
+          "description": "Tipo do valor fixo adicional"
+        },
+        "total_weight": {
+          "type": "number",
+          "description": "Peso total"
+        },
+        "document": {
+          "type": "string",
+          "description": "Documento: CPF ou CNPJ"
+        },
+        "type_document": {
+          "type": "string",
+          "description": "Tipo de documento CPF ou CNPJ"
+        },
+        "volumes": {
+          "type": "object",
+          "required": [
+            "height",
+            "length",
+            "price",
+            "quantity",
+            "total_price",
+            "total_weight",
+            "weight",
+            "width"
+          ],
+          "properties": {
+            "height": {
+              "type": "number",
+              "description": "Altura do volume"
+            },
+            "length": {
+              "type": "number",
+              "description": "Comprimento do volume"
+            },
+            "price": {
+              "type": "number",
+              "description": "Valor por item"
+            },
+            "quantity": {
+              "type": "number",
+              "description": "Quantidade"
+            },
+            "total_price": {
+              "type": "number",
+              "description": "Valor total"
+            },
+            "total_weight": {
+              "type": "number",
+              "description": "Peso total"
+            },
+            "weight": {
+              "type": "number",
+              "description": "Peso por item"
+            },
+            "width": {
+              "type": "number",
+              "description": "Largura do item"
+            }
+          }
+        },
+        "zip_code_end": {
+          "type": "string",
+          "description": "CEP de destino"
+        },
+        "zip_code_start": {
+          "type": "string",
+          "description": "CEP de origem"
+        }
+      },
+      "required": [
+        "volumes",
+        "zip_code_end",
+        "zip_code_start"
+      ],
+      "x-examples": {
+        "Exemplo": {
+          "amount": 350,
+          "base_id": "",
+          "cubage": 0.108,
+          "customer_id": "",
+          "extra_days": 2,
+          "pickup": true,
+          "delivery": true,
+          "bacony": false,
+          "additional_value": 5,
+          "additional_value_type": "PERCENT",
+          "total_weight": 9,
+          "document": "41244182800",
+          "type_document": "CNPJ",
+          "volumes": [
+            {
+              "height": 36,
+              "length": 25,
+              "price": 100,
+              "quantity": 1,
+              "total_price": 100,
+              "total_weight": 3.5,
+              "weight": 3.5,
+              "width": 45
+            }
+          ],
+          "zip_code_end": "04112-012",
+          "zip_code_start": "14020-240"
+        }
+      },
+      "description": "Modelo para criar uma cotação."
+    },
+    "Cotação": {
+      "type": "object",
+      "x-examples": {
+        "Exemplo": {
+          "result": [
+            {
+              "id": "5eb9b31e1097eb6cdf922d04",
+              "base": "RAO - SmartEnvios",
+              "service_code": 18,
+              "service": "Jadlog Package Pre Prod",
+              "value": 15.64,
+              "days": 2,
+              "is_valid": true,
+              "errors": []
+            }
+          ]
+        }
+      },
+      "properties": {
+        "result": {
+          "type": "array",
+          "description": "Lista de cotações",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID da Cotação"
+              },
+              "base": {
+                "type": "string",
+                "description": "ID da Cotação"
+              },
+              "service_code": {
+                "type": "integer",
+                "description": "Código do serviço"
+              },
+              "service": {
+                "type": "string",
+                "description": "Descrição do serviço"
+              },
+              "value": {
+                "type": "number",
+                "description": "Valor da cotação"
+              },
+              "days": {
+                "type": "integer",
+                "description": "Prazo para entrega"
+              },
+              "is_valid": {
+                "type": "boolean",
+                "description": "Cotação válida"
+              },
+              "errors": {
+                "type": "array",
+                "description": "Lista de erros da cotação",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+      "description": "Cotação criada."
+    }
+  },
+  "securityDefinitions": {}
+}
