@@ -22,7 +22,7 @@
         "tags": [
           "Cotação"
         ],
-        "summary": "Criar uma nova cotação de frete",
+        "summary": "Criar uma nova cotação de frete ",
         "description": "Este método cria uma nova cotação e retorna os custos de frete e o prazo de entrega de todas as transportadoras retornadas na cotação. \n\nPara garantir que a cotação retornada de uma transportadora está correta, certifique-se de que no retorno da resposta o campo 'is_valid' é 'true'.",
         "parameters": [
           {
